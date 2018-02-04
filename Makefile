@@ -31,4 +31,4 @@ run:
 
 .PHONY: clean
 clean:
-	rm -f main.efi main.so main.o uefi.img
+	rm -f main.efi main.so main.o uefi.img part.img
