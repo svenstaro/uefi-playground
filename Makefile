@@ -4,7 +4,7 @@ uefi.img: main.efi
 	sgdisk -n 1:2048:93727 -t 0:ef00 uefi.img
 	dd if=/dev/zero of=part.img bs=512 count=91680
 	mkfs.fat -F 32 -v part.img
-	mcopy -i part.img main.efi ::
+	mcopy -i part.img main.efi startup.nsh ::
 	dd if=part.img of=uefi.img bs=512 count=91680 seek=2048 conv=notrunc
 
 main.efi: main.so
@@ -23,7 +23,7 @@ main.o:
 
 .PHONY: run
 run:
-	qemu-system-x86_64 -cpu qemu64 \
+	qemu-system-x86_64 -cpu qemu64 -enable-kvm \
 		-drive if=pflash,format=raw,unit=0,file=/usr/share/ovmf/x64/OVMF_CODE.fd,readonly=on \
 		-drive if=pflash,format=raw,unit=1,file=/usr/share/ovmf/x64/OVMF_VARS.fd \
 		-drive file=uefi.img,if=ide \
